@@ -45,6 +45,18 @@
 - [ ] Assess system temperatures and fan operation
 - [ ] Document final hardware baseline
 
+### Secondary Network Interface
+
+- **Manufacturer:** TP-Link
+- **Model:** UE306
+- **Interface:** USB 3.0 Type-A
+- **Network speed:** 10/100/1000 Mbps
+- **Purpose:** Secondary Ethernet interface for isolated lab network
+- **Planned application:** OPNsense firewall and network segmentation testing
+- **Status:** Acquired; compatibility testing pending
+
+**Design decision:** Use an external USB Ethernet adapter for the initial proof-of-concept to minimize hardware costs. Evaluate a PCIe network interface if the lab becomes a permanent installation.
+
 ## Upgrade Decisions
 
 No additional hardware will be purchased until initial validation is complete.
