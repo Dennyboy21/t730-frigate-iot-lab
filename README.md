@@ -44,8 +44,8 @@ The existing household network will remain operational during initial developmen
 ## Project Phases
 
 - [x] Phase 1: Acquire and inspect hardware
-- [ ] Phase 2: Validate hardware and BIOS settings
-- [ ] Phase 3: Install and configure Proxmox VE
+- [x] Phase 2: Validate hardware and BIOS settings
+- [x] Phase 3: Install and configure Proxmox VE
 - [ ] Phase 4: Deploy OPNsense and test network segmentation
 - [ ] Phase 5: Install Frigate and connect a test camera
 - [ ] Phase 6: Evaluate IoT isolation and security rules
