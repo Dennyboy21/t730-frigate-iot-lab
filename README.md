@@ -1,66 +1,73 @@
 # HP t730 — Frigate & IoT Security Lab
 
-## Project Overview
+A hands-on cybersecurity and virtualization proof of concept built on an **$80 refurbished HP t730 Thin Client**. The goal is to practice secure network design, firewall policy, access control, evidence-based troubleshooting, and backup/recovery before a future managed home-network and local NVR deployment.
 
-This project documents the design, implementation, and testing of a low-cost home security and networking lab built around a refurbished HP t730 Thin Client.
+**Status (October 24, 2026):** Proxmox running; OPNsense and Debian test VMs operational; lab-to-home firewall restrictions validated; OPNsense administrator MFA enforced; baseline VM backups verified. **Frigate, cameras, physical IoT segmentation, and production UniFi migration remain future work.**
 
-The goal is to explore network segmentation, virtualization, firewall management, local video surveillance, and IoT security before implementing a permanent UniFi home network.
+## Hardware baseline
 
-**Initial hardware investment: $80**
-
-## Project Objectives
-
-- Deploy Proxmox VE as a virtualization platform.
-- Configure OPNsense for network segmentation and firewall testing.
-- Deploy Frigate for local IP-camera recording and object detection.
-- Create isolated networks for cameras and IoT devices.
-- Implement and validate firewall rules between networks.
-- Test system reliability, resource usage, and performance.
-- Document configuration decisions, troubleshooting, and lessons learned.
-
-## Hardware Baseline
-
-| Component | Specification |
+| Item | Baseline |
 |---|---|
-| Device | HP t730 Thin Client |
-| Processor | AMD RX-427BB |
-| Memory | 8GB DDR3L (2 × 4GB) |
-| Storage | 128GB M.2 SATA SSD |
-| Operating System at purchase | Windows 11 |
-| Network | Integrated Gigabit Ethernet |
-| Expansion | PCIe slot |
-| Cost | $80 |
+| Host | HP t730 Thin Client |
+| CPU | AMD RX-427BB |
+| Memory | 8 GB DDR3L |
+| Storage | 128 GB M.2 SATA SSD |
+| Platform | Proxmox VE 9.2.x |
+| Initial investment | $80 |
 
-Hardware specifications will be verified and updated throughout the project.
+## Lab architecture
 
-## Planned Architecture
+```text
+Existing household Internet and router
+              |
+   HP t730 / Proxmox VE
+      /            \
+ OPNsense VM     Debian 13 VM
+ (WAN + LAN)     (isolated client)
+      \____________/
+        virtual lab LAN
+```
 
-AT&T Fiber → Google Nest WiFi Pro → HP t730 (Proxmox) → OPNsense lab network
+OPNsense provides a routed and filtered downstream laboratory network. Management access remains on the upstream side. The household network was not migrated and its smart-home devices were not reconfigured during this phase.
 
-Frigate will operate within the lab environment, with network isolation implemented and tested in later phases.
+## Completed milestones
 
-The existing household network will remain operational during initial development.
+- [x] Inspect refurbished hardware, resolve power-on issue, and verify virtualization support.
+- [x] Install Proxmox VE, repair update repositories, upgrade, and reboot successfully.
+- [x] Deploy OPNsense virtual firewall and Debian 13 virtual client.
+- [x] Prove lab-to-firewall and lab-to-Internet reachability.
+- [x] Verify logged firewall denials for protected household and private destinations.
+- [x] Create baseline VM snapshots and configure monitored LVM-thin auto-extension.
+- [x] Create successful VM backups, transfer copies outside Proxmox, and verify matching SHA-256 hashes.
+- [x] Enroll administrator TOTP, verify positive and negative login tests, and enforce Web GUI MFA.
+- [x] Upload updated OPNsense configuration backup to private Google Drive (encryption verification pending).
 
-## Project Phases
+## Documentation
 
-- [x] Phase 1: Acquire and inspect hardware
-- [x] Phase 2: Validate hardware and BIOS settings
-- [x] Phase 3: Install and configure Proxmox VE
-- [ ] Phase 4: Deploy OPNsense and test network segmentation
-- [ ] Phase 5: Install Frigate and connect a test camera
-- [ ] Phase 6: Evaluate IoT isolation and security rules
-- [ ] Phase 7: Document performance, results, and future improvements
+| Area | Read |
+|---|---|
+| Hardware and host deployment | [Proxmox documentation](docs/proxmox/README.md) |
+| Network design | [Network architecture and future roadmap](docs/network-design.md) |
+| Firewall implementation and isolation tests | [OPNsense segmentation](docs/opnsense/01-virtual-firewall-and-segmentation.md) |
+| MFA and management troubleshooting | [OPNsense MFA and HTTPS diagnosis](docs/opnsense/02-webgui-mfa-and-https-troubleshooting.md) |
+| Snapshots, backups, and storage safeguards | [Backups and storage](docs/proxmox/06-snapshots-storage-and-backups.md) |
+| Evidence publication safeguards | [Sanitization checklist](docs/security-publication-checklist.md) |
 
-## Long-Term Vision
+Earlier dated build logs and proposed network designs are preserved as historical snapshots. Their older "pending" labels refer to the date they were originally authored, not this current project status.
 
-Use the results of this proof-of-concept to design a production home network incorporating UniFi networking equipment, VLAN segmentation, PoE cameras, local recording, and additional security controls.
+## Remaining milestones
 
-## Project Status
+- [ ] Independently confirm configuration backup encryption and conduct an isolated restore drill.
+- [ ] Expand firewall tests beyond ICMP (DNS and controlled TCP application cases).
+- [ ] Assess Proxmox resource headroom, storage, and backup retention.
+- [ ] Deploy Frigate NVR with a test camera and evaluate recording/object detection.
+- [ ] Design and test dedicated camera and IoT segments with suitable VLAN-capable hardware.
+- [ ] Evaluate a future UniFi deployment without disrupting household connectivity.
 
-**Current stage:** Hardware inspection and validation
+## What this lab demonstrates
 
-**Next milestone:** Complete the SSD discrepancy resolution and verify hardware operation.
+Virtualization administration, least-privilege network policy, defense-in-depth, MFA deployment and validation, TCP/PF diagnostic methods, log interpretation, backup integrity assurance, and documentation of test outcomes and unresolved findings.
 
-## Disclaimer
+## Security disclaimer
 
-This repository documents a personal educational lab. Configuration examples and network information are sanitized to prevent exposure of private infrastructure details.
+This is a personal educational laboratory. Example test cases are generalized. Real configuration exports, VM backup archives, authenticator seeds, passwords, session cookies, and sensitive system identifiers are deliberately **not** stored in the public repository.
