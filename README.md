@@ -2,7 +2,7 @@
 
 A hands-on cybersecurity and virtualization proof of concept built on an **$80 refurbished HP t730 Thin Client**. The goal is to practice secure network design, firewall policy, access control, evidence-based troubleshooting, and backup/recovery before a future managed home-network and local NVR deployment.
 
-**Status (October 26, 2026):** Proxmox running on the HP t730 with **16 GB upgraded RAM**; OPNsense and Debian VMs operational; post-upgrade lab-to-home firewall restrictions and OPNsense administrator MFA revalidated; baseline VM backups verified. **Frigate, cameras, physical IoT segmentation, and production UniFi migration remain future work.**
+**Status (November 3, 2026):** Proxmox running on the HP t730 with **16 GB upgraded RAM**; OPNsense and Debian VMs operational; lab-to-home firewall restrictions, administrator MFA and earlier baseline VM backups verified. **Frigate 0.18.2 now runs in Docker on Debian VM 102 with OpenVINO CPU detection: person and car labels are consistent on a looping test video.** A working VM snapshot and in-guest YAML copy were saved. **A physical camera, multi-camera performance, real camera/IoT VLANs, long-term recording and independent Frigate restore testing remain future work.**
 
 ## Hardware baseline
 
@@ -43,6 +43,10 @@ OPNsense provides a routed and filtered downstream laboratory network. Managemen
 - [x] Upload updated OPNsense configuration backup to private Google Drive (encryption verification pending).
 - [x] Upgrade HP t730 memory from 8 GB to 16 GB; verify 16 GB in BIOS, pass HP UEFI Memory Quick Check, and measure host memory availability increasing from 1.3 GiB to 9.0 GiB with both VMs running.
 - [x] Revalidate Debian lab-to-gateway and Internet access, OPNsense administrator MFA, and logged firewall blocking of lab-to-home traffic after the hardware change.
+- [x] Deploy Docker and Frigate 0.18.2 on Debian VM 102 with a separate 20 GB guest data disk.
+- [x] Validate OpenVINO SSD-Lite MobileNet v2 CPU inference and consistently identify person and car in looping parking-lot footage.
+- [x] Resolve excess background motion by disabling Improve Contrast while keeping motion threshold 30 and contour area 10.
+- [x] Record working single-stream metrics (5.1 camera FPS, 4.7 detection FPS, 0 skipped FPS at sampling) and save a Frigate VM snapshot plus in-guest configuration copy.
 
 ## Documentation
 
@@ -55,6 +59,7 @@ OPNsense provides a routed and filtered downstream laboratory network. Managemen
 | Snapshots, backups, and storage safeguards | [Backups and storage](docs/proxmox/06-snapshots-storage-and-backups.md) |
 | October 26 hardware upgrade and post-change testing | [16 GB RAM upgrade and verification](docs/proxmox/07-ram-upgrade-2026-10-26.md) |
 | Evidence publication safeguards | [Sanitization checklist](docs/security-publication-checklist.md) |
+| November Frigate deployment, diagnosis and validation | [Frigate/OpenVINO case study](docs/frigate/README.md) |
 
 Earlier dated build logs and proposed network designs are preserved as historical snapshots. Their older "pending" labels refer to the date they were originally authored, not this current project status.
 
@@ -63,15 +68,17 @@ Earlier dated build logs and proposed network designs are preserved as historica
 - [ ] Independently confirm configuration backup encryption and conduct an isolated restore drill.
 - [ ] Expand firewall tests beyond ICMP (DNS and controlled TCP application cases).
 - [x] Reassess host memory headroom after RAM upgrade.
-- [ ] Reassess storage capacity and backup retention ahead of Frigate deployment.
+- [ ] Reassess storage capacity and backup retention before enabling sustained Frigate recordings or additional cameras.
 - [ ] Optional extended RAM stability test beyond HP's passed UEFI Memory Quick Check.
-- [ ] Deploy Frigate NVR with a test camera and evaluate recording/object detection.
+- [x] Deploy Frigate NVR with a looping prerecorded virtual camera and verify person/car detection.
+- [ ] Attach an authorized live IP camera; validate stream handling, recording, retention and resource limits.
+- [ ] Perform an independent Frigate guest/media backup and isolated restore test.
 - [ ] Design and test dedicated camera and IoT segments with suitable VLAN-capable hardware.
 - [ ] Evaluate a future UniFi deployment without disrupting household connectivity.
 
 ## What this lab demonstrates
 
-Virtualization administration, least-privilege network policy, defense-in-depth, MFA deployment and validation, TCP/PF diagnostic methods, log interpretation, backup integrity assurance, and documentation of test outcomes and unresolved findings.
+Virtualization administration, least-privilege network policy, defense-in-depth, MFA deployment and validation, TCP/PF diagnostic methods, log interpretation, backup integrity assurance, **containerized NVR deployment, OpenVINO CPU inference diagnostics, motion-versus-object detection troubleshooting,** and documentation of test outcomes and unresolved findings.
 
 ## Security disclaimer
 
